@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbot
+  template:
+    metadata:
+      labels:
+        app: chatbot
+    spec:
+      imagePullSecrets:
+      - name: registrysecret
+      containers:
+      - name: chatgpt_telegram_bot
+        imagePullPolicy: Always
+        command:
+        - python3
+        - bot/bot.py
+        image: {{ .Values.werf.image.chatbot }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: mongo
+  template:
+    metadata:
+      labels:
+        component: mongo
+    spec:
+      imagePullSecrets:
+      - name: registrysecret
+      containers:
+      - name: mongo
+        imagePullPolicy: Always
+        image: {{ .Values.werf.image.mongo }}
+        volumeMounts:
+        - mountPath: /mongodb
+          name: mongodb
+        ports:
+        - containerPort: {{ .Values.mongo.port }}
+          name: mongo
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb
+    spec:
+      accessModes: [ ReadWriteOnce ]
+      storageClassName: linstor-data-r1
+      resources:
+        requests:
+          storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongoexpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: mongoexpress
+  template:
+    metadata:
+      labels:
+        component: mongoexpress
+    spec:
+      imagePullSecrets:
+      - name: registrysecret
+      containers:
+      - name: mongoexpress
+        imagePullPolicy: Always
+        image: {{ .Values.werf.image.mongoexpress }}
+        env:
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongo
+        - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+          value: "false"
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongo
+        - name: ME_CONFIG_MONGODB_AUTH_DATABASE
+          value: chatgpt_telegram_bot
+        - name: ME_CONFIG_BASICAUTH_USERNAME
+          value: {{ .Values.mongoexpress.username }}
+        - name: ME_CONFIG_BASICAUTH_PASSWORD
+          value: {{ .Values.mongoexpress.password }}

@@ -1,0 +1,35 @@
+name: ChatGPTBot
+run-name: ${{ github.actor }} is deploying chatgpt bot config 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: "Install werf"
+        uses: werf/actions/install@v1.2
+      - run: werf version
+      - name: Create kube config
+        run: |
+          KUBECONFIG=$(mktemp -d)/config
+          base64 -d <(printf "%s" $KUBE_CONFIG_BASE64_DATA) > $KUBECONFIG
+          echo KUBECONFIG=$KUBECONFIG >> $GITHUB_ENV
+        env:
+          KUBE_CONFIG_BASE64_DATA: ${{ secrets.KUBE_CONFIG_BASE64_DATA }}
+      - name: Run werf commands
+        run: |
+          source $(werf ci-env github --as-file)
+          werf render
+          werf converge --release=chatgpt-telegrambot-production --namespace=chatgpt-telegram --synchronization=:local
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          WERF_ENV: production
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."

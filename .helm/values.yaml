@@ -1,0 +1,8 @@
+mongo:
+  port: 27017
+mongoexpress:
+  port: 8081
+  host: chatdb.weirdexperimetns.cf
+certificate:
+  issuer: letsencrypt-prod
+allowed_telegram_usernames: 48030964

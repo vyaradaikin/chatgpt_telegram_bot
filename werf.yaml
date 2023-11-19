@@ -1,0 +1,13 @@
+configVersion: 1
+project: chatgpt_telebot
+---
+image: chatbot
+dockerfile: ./Dockerfile
+staged: true
+---
+image: mongo
+from: mongo:latest
+---
+image: mongoexpress
+from: mongo-express:latest
+

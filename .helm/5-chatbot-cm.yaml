@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chatgpt-bot-configmap
+data:
+  config.yml: |
+    telegram_token: {{ .Values.telegram_token }} 
+    openai_api_key: {{ .Values.openai_api_key }}
+    openai_api_base: null
+    allowed_telegram_usernames: [{{ .Values.allowed_telegram_usernames }}]
+    new_dialog_timeout: 600
+    return_n_generated_images: 1
+    n_chat_modes_per_page: 5
+    image_size: "512x512"
+    enable_message_streaming: true
+    chatgpt_price_per_1000_tokens: 0.002
+    gpt_price_per_1000_tokens: 0.02
+    whisper_price_per_1_min: 0.006
+  config.env: |
+    # local path where to store MongoDB
+    MONGODB_PATH=./mongodb
+    # MongoDB port
+    MONGODB_PORT=27017
+
+    # Mongo Express port
+    MONGO_EXPRESS_PORT=8081
+    # Mongo Express username
+    MONGO_EXPRESS_USERNAME=username
+    # Mongo Express password
+    MONGO_EXPRESS_PASSWORD=password
