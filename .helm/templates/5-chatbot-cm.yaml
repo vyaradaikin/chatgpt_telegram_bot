@@ -7,7 +7,7 @@ data:
     telegram_token: {{ .Values.telegram_token }} 
     openai_api_key: {{ .Values.openai_api_key }}
     openai_api_base: null
-    allowed_telegram_usernames: [{{ .Values.allowed_telegram_usernames }}]
+    allowed_telegram_usernames: [{{ .Values.allowed_telegram_usernames | quote }}]
     new_dialog_timeout: 600
     return_n_generated_images: 1
     n_chat_modes_per_page: 5
