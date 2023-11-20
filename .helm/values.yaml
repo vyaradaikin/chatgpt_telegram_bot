@@ -4,5 +4,5 @@ mongoexpress:
   port: 8081
   host: chatdb.weirdexperimetns.cf
 certificate:
-  issuer: letsencrypt-prod
+  issuer: letsencrypt
 allowed_telegram_usernames: 48030964
