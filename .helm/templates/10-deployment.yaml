@@ -15,7 +15,7 @@ spec:
       imagePullSecrets:
       - name: registrysecret
       containers:
-      - name: chatgpt_telegram_bot
+      - name: chatgpt-telegram-bot
         imagePullPolicy: Always
         command:
         - python3
