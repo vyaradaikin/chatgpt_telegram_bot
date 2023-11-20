@@ -52,15 +52,19 @@ spec:
       - name: mongodb
         persistentVolumeClaim:
           claimName: mongodb
-  volumeClaimTemplates:
-  - metadata:
-      name: mongodb
-    spec:
-      accessModes: [ ReadWriteOnce ]
-      storageClassName: linstor-data-r1
-      resources:
-        requests:
-          storage: 2Gi
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongodb
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: linstor-data-r1
+
 ---
 apiVersion: apps/v1
 kind: Deployment
