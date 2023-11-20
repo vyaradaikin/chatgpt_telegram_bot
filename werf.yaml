@@ -3,7 +3,6 @@ project: chatgpt-telebot
 ---
 image: chatbot
 dockerfile: ./Dockerfile
-staged: true
 ---
 image: mongo
 from: mongo:latest
