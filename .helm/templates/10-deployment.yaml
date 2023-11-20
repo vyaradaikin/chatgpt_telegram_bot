@@ -48,6 +48,10 @@ spec:
         ports:
         - containerPort: {{ .Values.mongo.port }}
           name: mongo
+      volumes:
+      - name: mongodb
+        persistentVolumeClaim:
+          claimName: mongodb
   volumeClaimTemplates:
   - metadata:
       name: mongodb
