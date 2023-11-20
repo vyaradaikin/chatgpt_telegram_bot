@@ -5,4 +5,4 @@ mongoexpress:
   host: chatdb.weirdexperimetns.cf
 certificate:
   issuer: letsencrypt
-allowed_telegram_usernames: "48030964"
+allowed_telegram_usernames: "48030964, 358709478"
