@@ -21,6 +21,18 @@ spec:
         - python3
         - bot/bot.py
         image: {{ .Values.werf.image.chatbot }}
+        volumeMounts:
+        - mountPath: /code/config/config.yml
+          name: config
+          subPath: config.yml
+        - mountPath: /code/config/config.env
+          name: config
+          subPath: config.env
+      volumes:
+      - name: config
+        configMap:
+          name: chatgpt-bot-configmap
+          defaultMode: 0600
 ---
 apiVersion: apps/v1
 kind: Deployment
